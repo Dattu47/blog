@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+        <div class="text-center mb-4">
+            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Login Icon" width="80">
+            <h2 class="fw-bold">Welcome Back</h2>
+            <p class="text-muted">Sign in to your account</p>
+        </div>
+
+        <form method="post" action="/login" class="shadow p-4 rounded bg-light fade-in">
+            <div class="mb-3">
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" name="email" class="form-control" placeholder="Enter your email" required>
+            </div>
+            
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" placeholder="Enter your password" required>
+            </div>
+            
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary btn-lg">Login</button>
+            </div>
+            
+            <div class="text-center mt-3">
+                <p class="mb-0">Don't have an account? <a href="/register" class="text-decoration-none">Register here</a></p>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

@@ -4,26 +4,36 @@
 <div class="text-center mb-4">
     <img src="https://cdn-icons-png.flaticon.com/512/3649/3649464.png" alt="Write Blog Icon" width="80">
     <h2 class="fw-bold">Share Your Thoughts</h2>
-    <p class="text-muted">Fill in the details below to publish your blog post.</p>
+    <p class="text-muted">Express yourself and connect with others through your writing.</p>
 </div>
 
 <form method="post" action="/blog" class="shadow p-4 rounded bg-light fade-in">
     <div class="mb-3">
-        <label for="author" class="form-label">Author</label>
-        <input type="text" name="author" class="form-control" placeholder="Your name" required>
+        <label for="title" class="form-label">Blog Title</label>
+        <input type="text" name="title" class="form-control" placeholder="Enter an engaging title" required>
+        <div class="form-text">Choose a title that captures your reader's attention.</div>
     </div>
-    <div class="mb-3">
-        <label for="title" class="form-label">Title</label>
-        <input type="text" name="title" class="form-control" placeholder="Enter blog title" required>
-    </div>
+    
     <div class="mb-3">
         <label for="content" class="form-label">Content</label>
-        <textarea name="content" class="form-control" rows="6" placeholder="Write your blog content here..." required></textarea>
+        <textarea name="content" class="form-control" rows="8" placeholder="Share your thoughts, experiences, or insights..." required></textarea>
+        <div class="form-text">Write your blog content here. Be authentic and engaging!</div>
     </div>
+    
     <div class="text-center">
         <button type="submit" class="btn btn-primary btn-lg">Publish Blog</button>
-        <a href="/" class="btn btn-outline-secondary ms-2">Back to Home</a>
+        <a href="/" class="btn btn-outline-secondary ms-2">Cancel</a>
     </div>
 </form>
+
+<div class="mt-4 p-3 bg-light rounded">
+    <h6><i class="bi bi-lightbulb"></i> Writing Tips:</h6>
+    <ul class="small text-muted mb-0">
+        <li>Start with a compelling introduction to hook your readers</li>
+        <li>Use clear, concise language and break up long paragraphs</li>
+        <li>Share personal experiences or insights to make it engaging</li>
+        <li>End with a thought-provoking conclusion or call-to-action</li>
+    </ul>
+</div>
 
 {% endblock %}

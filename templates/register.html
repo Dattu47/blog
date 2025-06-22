@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="text-center mb-4">
+            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135810.png" alt="Register Icon" width="80">
+            <h2 class="fw-bold">Join Our Community</h2>
+            <p class="text-muted">Create your account to start blogging</p>
+        </div>
+
+        <form method="post" action="/register" class="shadow p-4 rounded bg-light fade-in">
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" name="username" class="form-control" placeholder="Choose a username" required>
+            </div>
+            
+            <div class="mb-3">
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" name="email" class="form-control" placeholder="Enter your email" required>
+            </div>
+            
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" name="password" class="form-control" placeholder="Create a password (min 6 characters)" required minlength="6">
+            </div>
+            
+            <div class="mb-3">
+                <label for="confirm_password" class="form-label">Confirm Password</label>
+                <input type="password" name="confirm_password" class="form-control" placeholder="Confirm your password" required minlength="6">
+            </div>
+            
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-success btn-lg">Create Account</button>
+            </div>
+            
+            <div class="text-center mt-3">
+                <p class="mb-0">Already have an account? <a href="/login" class="text-decoration-none">Login here</a></p>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

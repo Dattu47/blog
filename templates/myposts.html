@@ -2,17 +2,14 @@
 {% block content %}
 
 <div class="text-center mb-5">
-    <img src="https://cdn-icons-png.flaticon.com/512/2910/2910791.png" alt="Admin Icon" width="70">
-    <h2 class="fw-bold">Admin Dashboard</h2>
-    <p class="text-muted">Manage all published blog posts from all users.</p>
+    <img src="https://cdn-icons-png.flaticon.com/512/3003/3003035.png" alt="My Posts Icon" width="70">
+    <h2 class="fw-bold">My Blog Posts</h2>
+    <p class="text-muted">Manage and view all your published articles.</p>
 </div>
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h5 class="mb-0">Total Blogs: {{ posts|length }}</h5>
-    <div>
-        <a href="/blog" class="btn btn-success">+ Create New Blog</a>
-        <a href="/" class="btn btn-outline-primary ms-2">← Back to Home</a>
-    </div>
+    <h5 class="mb-0">Total Posts: {{ posts|length }}</h5>
+    <a href="/blog" class="btn btn-success">+ Write New Blog</a>
 </div>
 
 {% if posts %}
@@ -21,7 +18,6 @@
             <thead class="table-dark">
                 <tr>
                     <th>Title</th>
-                    <th>Author</th>
                     <th>Content Preview</th>
                     <th>Published Date</th>
                     <th>Action</th>
@@ -31,7 +27,6 @@
                 {% for post in posts %}
                 <tr>
                     <td><strong>{{ post.title }}</strong></td>
-                    <td>{{ post.author }}</td>
                     <td>
                         {% if post.content|length > 100 %}
                             {{ post.content[:100] }}...
@@ -47,7 +42,7 @@
                         {% endif %}
                     </td>
                     <td>
-                        <form method="POST" action="/delete/{{ post.id }}" 
+                        <form method="POST" action="/delete-my-post/{{ post.id }}" 
                               onsubmit="return confirm('Are you sure you want to delete this post?');">
                             <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                         </form>
@@ -60,36 +55,14 @@
 {% else %}
     <div class="text-center py-5">
         <img src="https://cdn-icons-png.flaticon.com/512/3875/3875149.png" alt="No posts" width="120" class="mb-3">
-        <h4 class="text-muted">No blog posts available</h4>
-        <p class="text-muted">No users have published any blog posts yet.</p>
+        <h4 class="text-muted">No blog posts yet</h4>
+        <p class="text-muted">Start sharing your thoughts with the world!</p>
+        <a href="/blog" class="btn btn-primary btn-lg">Write Your First Blog</a>
     </div>
 {% endif %}
 
-<div class="row mt-5">
-    <div class="col-md-4">
-        <div class="card text-center">
-            <div class="card-body">
-                <h5 class="card-title">Total Posts</h5>
-                <h2 class="text-primary">{{ posts|length }}</h2>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card text-center">
-            <div class="card-body">
-                <h5 class="card-title">Unique Authors</h5>
-                <h2 class="text-success">{{ posts|map(attribute='author')|unique|list|length }}</h2>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card text-center">
-            <div class="card-body">
-                <h5 class="card-title">Admin Access</h5>
-                <h2 class="text-warning">✓</h2>
-            </div>
-        </div>
-    </div>
+<div class="text-center mt-4">
+    <a href="/" class="btn btn-outline-primary">← Back to Home</a>
 </div>
 
 {% endblock %}

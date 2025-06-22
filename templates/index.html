@@ -1,37 +1,289 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="text-center mb-4">
-<!-- <img src="static/blog.png" alt="Blog App Logo" width="80"> -->
-    <h1 class="fs-2 fw-bold">Welcome to My Blog Portal</h1>
-    <p class="fs-6 text-muted">Share your ideas. Read others'. Build a community.</p>
+<!-- Welcome Section for Logged-in Users -->
+{% if session.get('username') %}
+<div class="row justify-content-center mb-4">
+    <div class="col-md-10">
+        <div class="welcome-banner bg-primary text-white p-4 rounded shadow">
+            <div class="d-flex align-items-center">
+                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Welcome" width="60" class="me-3">
+                <div>
+                    <h2 class="mb-1">Welcome back, {{ session.get('username') }}! 👋</h2>
+                    <p class="mb-0 opacity-75">Ready to share your thoughts with the world?</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<section class="fade-in">
-    <h3 class="mb-3 text-center">Recent Blog Posts</h3>
-    {% if posts %}
-        <div class="row row-cols-1 g-3">
-            {% for post in posts %}
-            <div class="col">
-                <div class="card shadow-sm w-100">
-                    <div class="card-body">
-                        <h5 class="card-subtitle text-muted mb-2">by {{ post.author }}</h5>
-                        <h6 class="card-title">{{ post.title }}</h6>
-                        
-                        <p class="card-text">{{ post.content }}</p>
+<!-- Quick Actions -->
+<div class="row justify-content-center mb-4">
+    <div class="col-md-10">
+        <div class="d-flex flex-wrap gap-2 justify-content-center">
+            <a href="/blog" class="btn btn-success">
+                <i class="fas fa-plus"></i> Write New Post
+            </a>
+            <a href="/my-posts" class="btn btn-outline-primary">
+                <i class="fas fa-list"></i> My Posts
+            </a>
+            {% if session.get('email') == 'admin@blogapp.com' %}
+            <a href="/admin" class="btn btn-outline-warning">
+                <i class="fas fa-cog"></i> Admin Panel
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Posts Section for Logged-in Users -->
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <h3 class="mb-4 text-center">
+            <i class="fas fa-user-edit"></i> Your Published Posts
+        </h3>
+
+        <!-- Posts Display -->
+        {% if posts %}
+            <div class="row">
+                {% for post in posts %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100 shadow-sm hover-card">
+                        <div class="card-body d-flex flex-column">
+                            <!-- Post Header -->
+                            <div class="d-flex align-items-center mb-3">
+                                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Author" width="30" class="me-2">
+                                <div>
+                                    <small class="text-primary fw-bold">{{ post.author }}</small>
+                                    <br>
+                                    <small class="text-muted">
+                                        {% if post.timestamp %}
+                                            {{ post.timestamp.strftime('%B %d, %Y at %I:%M %p') }}
+                                        {% else %}
+                                            Recently posted
+                                        {% endif %}
+                                    </small>
+                                </div>
+                            </div>
+                            
+                            <!-- Post Title -->
+                            <h5 class="card-title text-dark mb-3">{{ post.title }}</h5>
+                            
+                            <!-- Post Content Preview -->
+                            <p class="card-text text-muted flex-grow-1">
+                                {% if post.content|length > 150 %}
+                                    {{ post.content[:150] }}...
+                                {% else %}
+                                    {{ post.content }}
+                                {% endif %}
+                            </p>
+                            
+                            <!-- Post Actions -->
+                            <div class="mt-auto">
+                                <div class="d-flex gap-2">
+                                    <button class="btn btn-sm btn-outline-primary" onclick="showFullPost('{{ post.id }}', '{{ post.title }}', '{{ post.content }}', '{{ post.author }}')">
+                                        <i class="fas fa-eye"></i> Read More
+                                    </button>
+                                    <a href="/edit/{{ post.id }}" class="btn btn-sm btn-outline-success">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                    <form method="post" action="/delete-my-post/{{ post.id }}" style="display: inline;" 
+                                          onsubmit="return confirm('Are you sure you want to delete this post?')">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <!-- No Posts Message for Logged Users -->
+            <div class="text-center py-5">
+                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135673.png" alt="No Posts" width="80" class="mb-3 opacity-50">
+                <h4 class="text-muted">No posts yet</h4>
+                <p class="text-muted mb-4">You haven't written any blog posts yet. Start sharing your thoughts!</p>
+                <a href="/blog" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Write Your First Post
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{% else %}
+<!-- Welcome Section for Non-logged Users -->
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <!-- Main Hero Section -->
+        <div class="hero-section text-center mb-5 p-5 bg-light rounded shadow-sm">
+            <div class="mb-4">
+                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135810.png" alt="Blog Icon" width="120" class="mb-3">
+            </div>
+            <h1 class="display-3 fw-bold text-primary mb-4">Welcome to BlogApp</h1>
+            <p class="lead text-muted mb-4 mx-auto" style="max-width: 600px;">
+                Your personal space to share stories, thoughts, and ideas with the world. 
+                Join our community of writers and readers who love to explore new perspectives and engage in meaningful conversations.
+            </p>
+            
+            <!-- Features Section -->
+            <div class="row mt-5 mb-4">
+                <div class="col-md-4 mb-3">
+                    <div class="p-3">
+                        <i class="fas fa-pen-fancy text-primary mb-2" style="font-size: 2rem;"></i>
+                        <h5 class="text-dark">Write & Share</h5>
+                        <p class="text-muted small">Create beautiful blog posts and share your unique voice with our community.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="p-3">
+                        <i class="fas fa-users text-success mb-2" style="font-size: 2rem;"></i>
+                        <h5 class="text-dark">Connect</h5>
+                        <p class="text-muted small">Engage with fellow writers and build meaningful connections through your content.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="p-3">
+                        <i class="fas fa-chart-line text-warning mb-2" style="font-size: 2rem;"></i>
+                        <h5 class="text-dark">Grow</h5>
+                        <p class="text-muted small">Track your writing journey and watch your audience grow over time.</p>
                     </div>
                 </div>
             </div>
-            {% endfor %}
+            
+            <!-- Call to Action Buttons -->
+            <div class="d-flex gap-3 justify-content-center flex-wrap mt-4">
+                <a href="/register" class="btn btn-primary btn-lg px-4 py-2">
+                    <i class="fas fa-user-plus me-2"></i> Join Us Today
+                </a>
+                <a href="/login" class="btn btn-outline-primary btn-lg px-4 py-2">
+                    <i class="fas fa-sign-in-alt me-2"></i> Login
+                </a>
+            </div>
+            
+            <!-- Additional Info -->
+            <div class="mt-4 pt-3 border-top">
+                <p class="text-muted small mb-0">
+                    <i class="fas fa-info-circle me-1"></i>
+                    Already have an account? <a href="/login" class="text-primary text-decoration-none">Sign in</a> to access your dashboard and manage your posts.
+                </p>
+            </div>
         </div>
-    {% else %}
-        <p class="text-center">No blog posts available yet.</p>
-    {% endif %}
-</section>
-
-<div class="d-flex justify-content-center gap-3 mt-4">
-    <a href="/blog" class="btn btn-primary btn-lg">Write a Blog</a>
-    <a href="/admin" class="btn btn-secondary btn-lg">Admin Panel</a>
+        
+        <!-- Secondary CTA Section -->
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card border-0 bg-primary text-white h-100">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-rocket mb-3" style="font-size: 2.5rem;"></i>
+                        <h4 class="card-title">Start Your Journey</h4>
+                        <p class="card-text">Join thousands of writers who have already started sharing their stories with the world.</p>
+                        <a href="/register" class="btn btn-light btn-sm">
+                            <i class="fas fa-arrow-right me-1"></i> Get Started
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card border-0 bg-success text-white h-100">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-book-open mb-3" style="font-size: 2.5rem;"></i>
+                        <h4 class="card-title">Explore & Read</h4>
+                        <p class="card-text">Discover amazing content from our community of passionate writers and thinkers.</p>
+                        <a href="/login" class="btn btn-light btn-sm">
+                            <i class="fas fa-arrow-right me-1"></i> Sign In
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+{% endif %}
+
+<!-- Modal for Full Post View -->
+<div class="modal fade" id="postModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex align-items-center mb-3">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Author" width="25" class="me-2">
+                    <small class="text-primary fw-bold" id="modalAuthor"></small>
+                </div>
+                <div id="modalContent" class="text-justify"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.welcome-banner {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    border: none;
+    animation: fadeIn 0.5s ease-in;
+}
+
+.hero-section {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    animation: fadeIn 0.8s ease-in;
+}
+
+.hover-card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.hover-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+.card-text {
+    line-height: 1.6;
+    white-space: pre-line;
+}
+
+#modalContent {
+    line-height: 1.8;
+    white-space: pre-line;
+}
+
+.card {
+    transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+</style>
+
+<script>
+function showFullPost(id, title, content, author) {
+    document.getElementById('modalTitle').textContent = title;
+    document.getElementById('modalAuthor').textContent = 'By ' + author;
+    document.getElementById('modalContent').textContent = content;
+    
+    const modal = new bootstrap.Modal(document.getElementById('postModal'));
+    modal.show();
+}
+</script>
 
 {% endblock %}
