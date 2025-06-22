@@ -7,13 +7,16 @@ import os
 
 app = Flask(__name__)
 
-# ✅ Load Firebase config from environment variable
+# ✅ Load and fix Firebase config from environment variable
 firebase_config_str = os.environ.get("FIREBASE_CONFIG_JSON")
 if firebase_config_str is None:
     raise ValueError("FIREBASE_CONFIG_JSON environment variable is not set.")
 
-firebase_config = json.loads(firebase_config_str)
-cred = credentials.Certificate(firebase_config)
+# Fix escaped newlines in private_key
+config_dict = json.loads(firebase_config_str)
+config_dict["private_key"] = config_dict["private_key"].replace("\\n", "\n")
+
+cred = credentials.Certificate(config_dict)
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
