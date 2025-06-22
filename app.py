@@ -2,11 +2,18 @@ from flask import Flask, request, render_template, redirect
 import firebase_admin
 from firebase_admin import credentials, firestore
 from datetime import datetime
+import json
+import os
 
 app = Flask(__name__)
 
-# ✅ Load credentials directly from local file (no env var or JSON parsing)
-cred = credentials.Certificate("firebase_config.json")
+# ✅ Load Firebase config from environment variable
+firebase_config_str = os.environ.get("FIREBASE_CONFIG_JSON")
+if firebase_config_str is None:
+    raise ValueError("FIREBASE_CONFIG_JSON environment variable is not set.")
+
+firebase_config = json.loads(firebase_config_str)
+cred = credentials.Certificate(firebase_config)
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
