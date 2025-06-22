@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="text-center mb-4">
+<!-- <img src="static/blog.png" alt="Blog App Logo" width="80"> -->
+    <h1 class="fs-2 fw-bold">Welcome to My Blog Portal</h1>
+    <p class="fs-6 text-muted">Share your ideas. Read others'. Build a community.</p>
+</div>
+
+<section class="fade-in">
+    <h3 class="mb-3 text-center">Recent Blog Posts</h3>
+    {% if posts %}
+        <div class="row row-cols-1 g-3">
+            {% for post in posts %}
+            <div class="col">
+                <div class="card shadow-sm w-100">
+                    <div class="card-body">
+                        <h5 class="card-subtitle text-muted mb-2">by {{ post.author }}</h5>
+                        <h6 class="card-title">{{ post.title }}</h6>
+                        
+                        <p class="card-text">{{ post.content }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-center">No blog posts available yet.</p>
+    {% endif %}
+</section>
+
+<div class="d-flex justify-content-center gap-3 mt-4">
+    <a href="/blog" class="btn btn-primary btn-lg">Write a Blog</a>
+    <a href="/admin" class="btn btn-secondary btn-lg">Admin Panel</a>
+</div>
+
+{% endblock %}

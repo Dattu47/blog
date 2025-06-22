@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="text-center mb-4">
+    <img src="https://cdn-icons-png.flaticon.com/512/3649/3649464.png" alt="Write Blog Icon" width="80">
+    <h2 class="fw-bold">Share Your Thoughts</h2>
+    <p class="text-muted">Fill in the details below to publish your blog post.</p>
+</div>
+
+<form method="post" action="/blog" class="shadow p-4 rounded bg-light fade-in">
+    <div class="mb-3">
+        <label for="author" class="form-label">Author</label>
+        <input type="text" name="author" class="form-control" placeholder="Your name" required>
+    </div>
+    <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input type="text" name="title" class="form-control" placeholder="Enter blog title" required>
+    </div>
+    <div class="mb-3">
+        <label for="content" class="form-label">Content</label>
+        <textarea name="content" class="form-control" rows="6" placeholder="Write your blog content here..." required></textarea>
+    </div>
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary btn-lg">Publish Blog</button>
+        <a href="/" class="btn btn-outline-secondary ms-2">Back to Home</a>
+    </div>
+</form>
+
+{% endblock %}
