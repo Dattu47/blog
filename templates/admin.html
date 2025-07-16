@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="text-center mb-5">
+    <img src="https://cdn-icons-png.flaticon.com/512/2910/2910791.png" alt="Admin Icon" width="70">
+    <h2 class="fw-bold">Admin Dashboard</h2>
+    <p class="text-muted">Manage all posts and users on the platform.</p>
+</div>
+
+<h4 class="mb-3">📃 All Blog Posts</h4>
+
+{% for post in posts %}
+<div class="card mb-3 shadow-sm">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <h5 class="card-title mb-0">{{ post.title }}</h5>
+            <span class="badge bg-secondary">{{ post.author }}</span>
+        </div>
+        <p class="text-muted small">{{ post.timestamp.strftime('%Y-%m-%d %H:%M') }}</p>
+        {% if post.image %}
+            <img src="{{ post.image }}" class="img-fluid rounded mb-3" style="max-height: 200px;">
+        {% endif %}
+        <p>{{ post.content[:120] }}...</p>
+        <div class="d-flex justify-content-end gap-2">
+            <a href="/edit/{{ post.int_id }}" class="btn btn-outline-success btn-sm">✏️ Edit</a>
+            <form action="/delete/{{ post.id }}" method="POST" onsubmit="return confirm('Delete this post?');">
+                <button type="submit" class="btn btn-outline-danger btn-sm">🗑 Delete</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+<hr class="my-5">
+
+<h4 class="mb-3">👥 All Registered Users</h4>
+<div class="table-responsive">
+    <table class="table table-hover table-bordered align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>#</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Registered On</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.created_at.strftime('%b %d, %Y') if user.created_at }}</td>
+                <td>
+                    {% if user.email != session.email %}
+                    <form action="{{ url_for('delete_user_account', user_id=user.id) }}" method="POST" onsubmit="return confirm('Delete this user and all their posts?');">
+    <button type="submit" class="btn btn-danger btn-sm">🗑 Delete User</button>
+</form>
+
+                    {% else %}
+                    <span class="text-muted">Admin</span>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

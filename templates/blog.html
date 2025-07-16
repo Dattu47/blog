@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white text-center">
+                <img src="https://cdn-icons-png.flaticon.com/512/3003/3003035.png" alt="Write Icon" width="50" class="mb-2">
+                <h3 class="mb-0">Write Your Blog Post</h3>
+                <p class="mb-0 opacity-75">Share your thoughts with the world</p>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST" action="{{ url_for('blog') }}" enctype="multipart/form-data">
+                    <div class="mb-4">
+                        <label for="title" class="form-label">
+                            <i class="fas fa-heading me-1"></i> Blog Title
+                        </label>
+                        <input type="text" class="form-control" id="title" name="title" 
+                               value="{{ post.title if post else '' }}" 
+                               placeholder="Enter an engaging title" required>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="content" class="form-label">
+                            <i class="fas fa-file-alt me-1"></i> Blog Content
+                        </label>
+                        <textarea class="form-control" id="content" name="content" rows="10" 
+                                  placeholder="Write your blog content..." required>{{ post.content if post else '' }}</textarea>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="image" class="form-label">
+                            <i class="fas fa-image me-1"></i> Add Image
+                        </label>
+                        <input class="form-control" type="file" name="image" accept="image/*">
+                        {% if post and post.image %}
+                        <img src="{{ post.image }}" class="img-fluid mt-2 rounded shadow-sm" style="max-height: 200px;">
+                        {% endif %}
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="fas fa-paper-plane me-2"></i> Publish Blog Post
+                        </button>
+                        <a href="/" class="btn btn-outline-secondary">
+                            <i class="fas fa-times me-2"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,50 @@
+# === Python cache files ===
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# === Environment variables ===
+.env
+*.env
+
+# === Firebase credentials (IMPORTANT) ===
+firebase_config.json
+
+# === System files ===
+.DS_Store
+Thumbs.db
+
+# === VS Code and IDE config ===
+.vscode/
+.idea/
+*.swp
+
+# === Render and deployment ===
+venv/
+.venv/
+*.log
+*.sqlite3
+
+# === Node.js (if used for frontend assets) ===
+node_modules/
+package-lock.json
+npm-debug.log
+
+# === Python packaging ===
+dist/
+build/
+*.egg-info/
+
+# === OS-generated files ===
+*.bak
+*.tmp
+
+# === Compiled files ===
+*.so
+*.dll
+*.exe
+
+# === Git ===
+*.orig

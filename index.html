@@ -1,0 +1,73 @@
+
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container my-4">
+    {% if session.get('username') %}
+    <div class="alert alert-primary text-center">
+        Welcome back, <strong>{{ session.get('username') }}</strong>!
+        <a href="/blog" class="btn btn-success btn-sm ms-2">Write Post</a>
+    </div>
+    {% endif %}
+
+    <div class="d-flex flex-column align-items-center">
+        {% for post in posts %}
+        <div class="card mb-4 shadow-sm w-100" style="max-width: 720px;">
+            <!-- Header -->
+            <div class="card-header bg-white border-0 d-flex align-items-center">
+                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="rounded-circle me-3" width="40" alt="avatar">
+                <div>
+                    <h6 class="mb-0">{{ post.author }}</h6>
+                    <small class="text-muted">
+                        {{ post.timestamp.strftime('%b %d, %Y at %I:%M %p') if post.timestamp else 'Just now' }}
+                    </small>
+                </div>
+            </div>
+
+            <!-- Image -->
+            {% if post.image %}
+            <img src="{{ post.image }}" class="card-img-top" style="object-fit: cover; max-height: 400px;">
+            {% endif %}
+
+            <!-- Body -->
+            <div class="card-body">
+                <h5 class="card-title">{{ post.title }}</h5>
+                <p class="card-text" style="white-space: pre-line;">
+                    {% if post.content|length > 300 %}
+                        {{ post.content[:300] }}...
+                    {% else %}
+                        {{ post.content }}
+                    {% endif %}
+                </p>
+
+                <!-- Actions -->
+                <div class="d-flex flex-wrap gap-2">
+                    <form action="{{ url_for('like_post', post_id=post.id) }}" method="POST">
+                        <button type="submit" class="btn btn-sm btn-outline-success">
+                            👍 Like ({{ post.likes|default(0) }})
+                        </button>
+                    </form>
+
+                    <a href="{{ url_for('view_post', post_id=post.id) }}" class="btn btn-sm btn-outline-primary">
+                        💬 Comments
+                    </a>
+
+                    {% if session.get('user_id') == post.user_id or session.get('email') == 'admin@blogapp.com' %}
+                    <a href="/edit/{{ post.id }}" class="btn btn-sm btn-outline-secondary">✏️ Edit</a>
+                    <form method="post" action="/delete-my-post/{{ post.id }}" class="d-inline"
+                          onsubmit="return confirm('Are you sure you want to delete this post?')">
+                        <button type="submit" class="btn btn-sm btn-outline-danger">🗑 Delete</button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="text-center text-muted mt-5">
+            <p>No posts yet. <a href="/blog">Write your first blog post</a>.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

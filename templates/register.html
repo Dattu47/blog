@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+{% block content %}
+
+
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-sm">
+            <div class="card-header bg-success text-white text-center">
+                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135810.png" alt="Register Icon" width="50" class="mb-2">
+                <h3 class="mb-0">Join BlogApp!</h3>
+                <p class="mb-0 opacity-75">Create your account to start blogging</p>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST" action="/register">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">
+                            <i class="fas fa-user me-1"></i> Username
+                        </label>
+                        <input type="text" class="form-control" id="username" name="username" 
+                               placeholder="Choose a username" required>
+                        <div class="form-text">This will be displayed as your author name</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="email" class="form-label">
+                            <i class="fas fa-envelope me-1"></i> Email Address
+                        </label>
+                        <input type="email" class="form-control" id="email" name="email" 
+                               placeholder="Enter your email" required>
+                        <div class="form-text">We'll never share your email with anyone</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="password" class="form-label">
+                            <i class="fas fa-lock me-1"></i> Password
+                        </label>
+                        <input type="password" class="form-control" id="password" name="password" 
+                               placeholder="Create a password" required minlength="6">
+                        <div class="form-text">Must be at least 6 characters long</div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="confirm_password" class="form-label">
+                            <i class="fas fa-lock me-1"></i> Confirm Password
+                        </label>
+                        <input type="password" class="form-control" id="confirm_password" name="confirm_password" 
+                               placeholder="Confirm your password" required minlength="6">
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="fas fa-user-plus me-2"></i> Create Account
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center bg-light">
+                <p class="mb-0">
+                    Already have an account? 
+                    <a href="/login" class="text-success text-decoration-none fw-bold">Sign in here</a>
+                </p>
+            </div>
+        </div>
+        
+        <!-- Features Preview -->
+        <div class="row mt-4">
+            <div class="col-6">
+                <div class="card bg-light border-0 text-center">
+                    <div class="card-body py-3">
+                        <i class="fas fa-edit text-primary mb-2" style="font-size: 1.5rem;"></i>
+                        <h6 class="small text-muted">Write & Publish</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card bg-light border-0 text-center">
+                    <div class="card-body py-3">
+                        <i class="fas fa-comments text-warning mb-2" style="font-size: 1.5rem;"></i>
+                        <h6 class="small text-muted">Engage & Comment</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.card {
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.card-header {
+    background: linear-gradient(135deg, #28a745, #20c997) !important;
+    border-bottom: none;
+}
+
+.form-control {
+    border-radius: 10px;
+    padding: 12px 15px;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+    transform: translateY(-2px);
+}
+
+.btn {
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.form-text {
+    font-size: 0.8rem;
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+</style>
+
+<script>
+// Password confirmation validation
+document.getElementById('confirm_password').addEventListener('input', function() {
+    const password = document.getElementById('password').value;
+    const confirmPassword = this.value;
+    
+    if (password !== confirmPassword) {
+        this.setCustomValidity('Passwords do not match');
+    } else {
+        this.setCustomValidity('');
+    }
+});
+
+document.getElementById('password').addEventListener('input', function() {
+    const confirmPassword = document.getElementById('confirm_password');
+    if (confirmPassword.value) {
+        confirmPassword.dispatchEvent(new Event('input'));
+    }
+});
+</script>
+
+{% endblock %}

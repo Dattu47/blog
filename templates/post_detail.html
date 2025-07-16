@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10 col-lg-8">
+        <!-- Post Header -->
+        <div class="text-center mb-4">
+            <h1 class="fw-bold text-primary">{{ post.title }}</h1>
+            <div class="d-flex justify-content-center align-items-center text-muted mt-3">
+                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Author" width="30" class="me-2">
+                <span class="me-3"><strong>{{ post.author }}</strong></span>
+                <span class="me-3">•</span>
+                <span><i class="fas fa-calendar-alt me-1"></i> Published on {{ post.timestamp.strftime('%B %d, %Y at %I:%M %p') }}</span>
+            </div>
+        </div>
+
+        <!-- Post Image -->
+        {% if post.image %}
+        <div class="text-center mb-4">
+            <img src="{{ post.image }}" class="img-fluid rounded shadow" style="max-height: 400px;">
+        </div>
+        {% endif %}
+
+        <!-- Post Content -->
+        <div class="card shadow-sm mb-5">
+            <div class="card-body p-4">
+                <div class="post-content" style="white-space: pre-line; line-height: 1.8; font-size: 1.1rem;">{{ post.content }}</div>
+            </div>
+        </div>
+
+        <!-- Admin/User Action Buttons -->
+        {% if session['user_id'] == post.user_id or session['email'] == 'dattatreya448@gmail.com' %}
+        <div class="d-flex justify-content-end gap-2 mt-3">
+            <a href="/edit/{{ post.int_id }}" class="btn btn-primary">Edit</a>
+            <form action="/delete/{{ post.id }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this post?');">
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+        </div>
+        {% endif %}
+
+        <hr class="my-5">
+
+        <!-- Comments Section -->
+        <div class="comments-section">
+            <div class="d-flex align-items-center mb-4">
+                <h3 class="mb-0"><i class="fas fa-comments text-primary"></i> Comments</h3>
+                <span class="badge bg-primary ms-2">{{ comments|length }}</span>
+            </div>
+
+            <!-- Add Comment -->
+            {% if session.get('username') %}
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-light"><h6 class="mb-0"><i class="fas fa-plus-circle text-success"></i> Add Your Comment</h6></div>
+                <div class="card-body">
+                    <form method="post" action="/comment/{{ post.id }}">
+                        <input type="hidden" name="int_id" value="{{ post.int_id }}">
+                        <div class="mb-3">
+                            <textarea name="comment" class="form-control" rows="4" placeholder="Share your thoughts..." required></textarea>
+                        </div>
+                        <div class="text-end">
+                            <button type="submit" class="btn btn-success"><i class="fas fa-paper-plane"></i> Post Comment</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            {% else %}
+            <div class="alert alert-info text-center">
+                <i class="fas fa-info-circle"></i> <a href="/login" class="fw-bold">Login</a> to join the conversation.
+            </div>
+            {% endif %}
+
+            <!-- Show Comments -->
+            {% if comments %}
+                {% for comment in comments %}
+                <div class="card shadow-sm mb-3 comment-card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" width="35" class="me-3 rounded-circle">
+                            <div>
+                                <h6 class="mb-0 text-primary fw-bold">{{ comment.user }}</h6>
+                                <small class="text-muted"><i class="fas fa-clock me-1"></i>{{ comment.timestamp.strftime('%B %d, %Y at %I:%M %p') }}</small>
+                            </div>
+                        </div>
+                        <div class="comment-text" style="white-space: pre-line;">{{ comment.text }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="text-center py-5">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1077/1077114.png" alt="No Comments" width="80" class="mb-3 opacity-50">
+                    <h5 class="text-muted">No comments yet</h5>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
